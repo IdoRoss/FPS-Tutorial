@@ -35,7 +35,9 @@ public class PlayerController : MonoBehaviour
     public float maxHeat = 10f, heatPerShot = 1f, coolRate = 4f, overHeatCoolRate = 5f;
     private float heatCounter;
     private bool overHeated;
-    
+
+    public Gun[] allGuns;
+    private int selectedGun;
     
 
     //-----Start is called before the first frame update-----//
