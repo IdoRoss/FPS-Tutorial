@@ -201,5 +201,6 @@ public class PlayerController : MonoBehaviour
             gun.gameObject.SetActive(false);
         }
         allGuns[selectedGun].gameObject.SetActive(true);
+        allGuns[selectedGun].muzzleFlash.SetActive(false);
     }
 }
