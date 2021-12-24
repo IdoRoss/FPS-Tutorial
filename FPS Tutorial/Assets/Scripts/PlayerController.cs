@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     public Gun[] allGuns;
     private int selectedGun;
 
-    public float muzzleDisplayTime=0.01f;
+    public float muzzleDisplayTime = 0.01f;
     private float muzzleCounter;
 
 
@@ -96,11 +96,11 @@ public class PlayerController : MonoBehaviour
         charCon.Move(movement * Time.deltaTime);
 
         // Handle shooting
-        
-        if(allGuns[selectedGun].muzzleFlash.activeInHierarchy)
+
+        if (allGuns[selectedGun].muzzleFlash.activeInHierarchy)
         {
             muzzleCounter -= Time.deltaTime;
-            if(muzzleCounter <= 0)
+            if (muzzleCounter <= 0)
             {
                 allGuns[selectedGun].muzzleFlash.SetActive(false);
             }
@@ -154,6 +154,15 @@ public class PlayerController : MonoBehaviour
                 selectedGun = allGuns.Length - 1;
             }
             SwitchGun();
+        }
+
+        for (int i = 1; i <= allGuns.Length; i++)
+        {
+            if (Input.GetKeyDown(i.ToString()))
+            {
+                selectedGun = i - 1;
+                SwitchGun();
+            }
         }
 
         // Freeing the mouse
