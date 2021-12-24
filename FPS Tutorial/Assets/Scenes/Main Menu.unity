@@ -1109,7 +1109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1255670611
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1354,13 +1354,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Create Room Button
       objectReference: {fileID: 0}
+    - target: {fileID: 3931010143135630539, guid: 79b93b3a01ff93d4891eae2914dbe678, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3931010143135630540, guid: 79b93b3a01ff93d4891eae2914dbe678, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 276292871}
     - target: {fileID: 3931010143135630540, guid: 79b93b3a01ff93d4891eae2914dbe678, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OpenRoomCreate
+      value: CreateRoom
       objectReference: {fileID: 0}
     - target: {fileID: 3931010143135630540, guid: 79b93b3a01ff93d4891eae2914dbe678, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
