@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     // Player vars
     public CharacterController charCon;
+    public int maxHealth = 100;
+    private int currentHealth;
 
     // Weapon vars
     public GameObject bulletImpact;
@@ -46,14 +48,18 @@ public class PlayerController : MonoBehaviourPunCallbacks
     //-----Start is called before the first frame update-----//
     void Start()
     {
+        currentHealth = maxHealth;
         Cursor.lockState = CursorLockMode.Locked;
         cam = Camera.main;
         UIController.instance.weaponTempSlider.maxValue = maxHeat;
+        UIController.instance.healthSlider.maxValue = maxHealth;
+        UIController.instance.healthSlider.value = currentHealth;
         selectedGun = 0;
         SwitchGun();
         Transform newTrans = SpawnManager.instance.GetSpawnPoint();
         transform.position = newTrans.position;
         transform.rotation = newTrans.rotation;
+        
     }
 
     //-----Update is called once per frame-----//
@@ -192,7 +198,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 //Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
                 PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
-                hit.collider.gameObject.GetPhotonView().RPC("DealDamage",RpcTarget.All, photonView.Owner.NickName);
+                hit.collider.gameObject.GetPhotonView().RPC("DealDamage",RpcTarget.All, photonView.Owner.NickName, allGuns[selectedGun].damage);
             }
             else
             {
@@ -213,19 +219,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
         muzzleCounter = muzzleDisplayTime;
     }
     [PunRPC]
-    public void DealDamage(string damager)
+    public void DealDamage(string damager, int damageAmount)
     {
-        TakeDamage(damager);
+        TakeDamage(damager, damageAmount);
     }
-    public void TakeDamage(string damager)
+    public void TakeDamage(string damager, int damageAmount)
     {
         if(photonView.IsMine)
         {
-            //Debug.Log(photonView.Owner.NickName + " Is Hit by " + damager);
-            PlayerSpawner.instance.Die(damager);
+            currentHealth -= damageAmount;
+            UIController.instance.healthSlider.value = currentHealth;
+            if (currentHealth <= 0)
+            {
+                PlayerSpawner.instance.Die(damager);
+            }
         }
-        
-        
     }
     //-----LateUpdate is called once per frame after all regular Update  calls-----//
     private void LateUpdate()
