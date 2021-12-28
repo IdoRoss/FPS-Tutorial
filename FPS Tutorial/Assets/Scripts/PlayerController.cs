@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public float muzzleDisplayTime = 0.01f;
     private float muzzleCounter;
 
-
+    public GameObject playerHitImpact;
     //-----Start is called before the first frame update-----//
     void Start()
     {
@@ -188,8 +188,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             //Debug.Log("Player hit" + hit.collider.gameObject.name);
-            GameObject bulletImpactObject = Instantiate(bulletImpact, hit.point + hit.normal * 0.002f, Quaternion.LookRotation(hit.normal, Vector3.up));
-            Destroy(bulletImpactObject, 4f);
+            if (hit.collider.gameObject.tag == "Player")
+            {
+                Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
+                PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
+            }
+            else
+            {
+                GameObject bulletImpactObject = Instantiate(bulletImpact, hit.point + hit.normal * 0.002f, Quaternion.LookRotation(hit.normal, Vector3.up));
+                Destroy(bulletImpactObject, 4f);
+            }
         }
         shotCounter = allGuns[selectedGun].timeBetweenShots;
 

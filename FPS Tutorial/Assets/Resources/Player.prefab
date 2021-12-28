@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 5551949257584965702}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,6 +219,7 @@ MonoBehaviour:
   - {fileID: 5995564733989029932}
   - {fileID: 5995564733810550929}
   muzzleDisplayTime: 0.016666668
+  playerHitImpact: {fileID: 8863076395392662015, guid: 8b48df3a36862a34386a80251fcc5d72, type: 3}
 --- !u!143 &5995564734155308940
 CharacterController:
   m_ObjectHideFlags: 0
