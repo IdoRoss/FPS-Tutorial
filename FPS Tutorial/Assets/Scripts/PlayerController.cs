@@ -190,8 +190,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
             //Debug.Log("Player hit" + hit.collider.gameObject.name);
             if (hit.collider.gameObject.tag == "Player")
             {
-                Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
+                //Debug.Log("Hit " + hit.collider.gameObject.GetPhotonView().Owner.NickName);
                 PhotonNetwork.Instantiate(playerHitImpact.name, hit.point, Quaternion.identity);
+                hit.collider.gameObject.GetPhotonView().RPC("DealDamage",RpcTarget.All, photonView.Owner.NickName);
             }
             else
             {
@@ -210,6 +211,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         allGuns[selectedGun].muzzleFlash.SetActive(true);
         muzzleCounter = muzzleDisplayTime;
+    }
+    [PunRPC]
+    public void DealDamage(string damager)
+    {
+        TakeDamage(damager);
+    }
+    public void TakeDamage(string damager)
+    {
+        if(photonView.IsMine)
+        {
+            //Debug.Log(photonView.Owner.NickName + " Is Hit by " + damager);
+            PlayerSpawner.instance.Die(damager);
+        }
+        
+        
     }
     //-----LateUpdate is called once per frame after all regular Update  calls-----//
     private void LateUpdate()
