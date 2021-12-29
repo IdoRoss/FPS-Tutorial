@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private bool isGrounded;
 
     // Player vars
+    public GameObject playerModel;
     public CharacterController charCon;
     public int maxHealth = 100;
     private int currentHealth;
@@ -45,21 +46,38 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private float muzzleCounter;
 
     public GameObject playerHitImpact;
+
+    public Animator anim;
+    public Transform modelGunPoint, gunHolder;
+
     //-----Start is called before the first frame update-----//
     void Start()
     {
         currentHealth = maxHealth;
         Cursor.lockState = CursorLockMode.Locked;
         cam = Camera.main;
-        UIController.instance.weaponTempSlider.maxValue = maxHeat;
-        UIController.instance.healthSlider.maxValue = maxHealth;
-        UIController.instance.healthSlider.value = currentHealth;
+        
         selectedGun = 0;
-        SwitchGun();
+        //SwitchGun();
+        photonView.RPC("SetGun", RpcTarget.All, selectedGun);
+        /*????????
         Transform newTrans = SpawnManager.instance.GetSpawnPoint();
         transform.position = newTrans.position;
         transform.rotation = newTrans.rotation;
-        
+        */
+        if(photonView.IsMine)
+        {
+            UIController.instance.weaponTempSlider.maxValue = maxHeat;
+            UIController.instance.healthSlider.maxValue = maxHealth;
+            UIController.instance.healthSlider.value = currentHealth;
+            playerModel.SetActive(false);
+        }
+        else
+        {
+            gunHolder.parent = modelGunPoint;
+            gunHolder.localPosition = Vector3.zero;
+            gunHolder.localRotation = Quaternion.identity;
+        }
     }
 
     //-----Update is called once per frame-----//
@@ -153,7 +171,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 {
                     selectedGun = 0;
                 }
-                SwitchGun();
+                //SwitchGun();
+                photonView.RPC("SetGun", RpcTarget.All, selectedGun);
             }
             else if (Input.GetAxisRaw("Mouse ScrollWheel") > 0)
             {
@@ -162,7 +181,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 {
                     selectedGun = allGuns.Length - 1;
                 }
-                SwitchGun();
+                //SwitchGun();
+                photonView.RPC("SetGun", RpcTarget.All, selectedGun);
             }
 
             for (int i = 1; i <= allGuns.Length; i++)
@@ -170,9 +190,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 if (Input.GetKeyDown(i.ToString()))
                 {
                     selectedGun = i - 1;
-                    SwitchGun();
+                    //SwitchGun();
+                    photonView.RPC("SetGun", RpcTarget.All, selectedGun);
                 }
             }
+
+            anim.SetBool("grounded", isGrounded);
+            anim.SetFloat("speed", moveDir.magnitude);
 
             // Freeing the mouse
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -228,11 +252,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if(photonView.IsMine)
         {
             currentHealth -= damageAmount;
-            UIController.instance.healthSlider.value = currentHealth;
+            
             if (currentHealth <= 0)
             {
                 PlayerSpawner.instance.Die(damager);
             }
+
+            UIController.instance.healthSlider.value = currentHealth;
         }
     }
     //-----LateUpdate is called once per frame after all regular Update  calls-----//
@@ -253,5 +279,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
         allGuns[selectedGun].gameObject.SetActive(true);
         allGuns[selectedGun].muzzleFlash.SetActive(false);
+    }
+
+    [PunRPC]
+    public void SetGun(int gunToSwitchto)
+    {
+        if(gunToSwitchto < allGuns.Length)
+        {
+            selectedGun = gunToSwitchto;
+            SwitchGun();
+        }
     }
 }
