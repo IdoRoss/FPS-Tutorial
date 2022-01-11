@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+// This class is a singletone responsible of giving access to the ui
 public class UIController : MonoBehaviour
 {
     public static UIController instance;
@@ -20,7 +21,8 @@ public class UIController : MonoBehaviour
     public GameObject deathScrean;
     public TMP_Text deathText;
 
-
+    public TMP_Text killsCountText;
+    public TMP_Text deathsCountText;
 
     //// Start is called before the first frame update
     //void Start()

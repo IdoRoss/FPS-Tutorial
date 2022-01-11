@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-
+// This class is responsible of the luncher and seting up a match
 public class Launcher : MonoBehaviourPunCallbacks
 {
     public static Launcher instance;
@@ -12,33 +12,33 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         instance = this;
     }
-
+    // Main menu buttons
+    public GameObject menuButtons;
+    // Loading screen vars
     public GameObject loadingScreen;
     public TMP_Text loadingText;
-
-    public GameObject menuButtons;
-
+    // Create room screen vars
     public GameObject createRoomScreen;
     public TMP_InputField roomNameInput;
-
+    // Room screen vars
     public GameObject roomScreen;
     public TMP_Text roomNameText, playerNameLabel;
     private List<TMP_Text> allPlayerNames = new List<TMP_Text>();
-
+    // Error screen vars
     public GameObject errorScreen;
     public TMP_Text errorText;
-
+    // Room browser screen vars
     public GameObject roomBrowserScreen;
     public RoomButton theRoomButton;
     private List<RoomButton> allRoomButtons = new List<RoomButton>();
-
+    // Username selection screen vars
     public GameObject nameInputScreen;
     public TMP_InputField nameInput;
     private bool hasSetNick;
-
+    // Starting a match
     public string levelToPlay;
     public GameObject startButton;
-
+    // Test button
     public GameObject roomTestButton;
 
     // Start is called before the first frame update
@@ -54,7 +54,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomTestButton.SetActive(true);
 #endif
     }
-
+    // Close all menus
     void CloseMenus()
     {
         loadingScreen.SetActive(false);

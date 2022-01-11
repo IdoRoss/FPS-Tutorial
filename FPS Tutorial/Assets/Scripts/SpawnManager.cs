@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+// This class is a singletone responsible of giving players a spawn point
 public class SpawnManager : MonoBehaviour
 {
     public static SpawnManager instance;
@@ -15,6 +15,7 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Dont show the spawnpoints
         foreach(Transform spawn in spawnPoints)
         {
             spawn.gameObject.SetActive(false);
